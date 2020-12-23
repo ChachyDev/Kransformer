@@ -28,7 +28,6 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     inline fun <reified T : AbstractInsnNode> MethodNode.findInstruction(predicate: (T) -> Boolean): T? {
         for (insn in instructions) {
             if (insn is T && predicate(insn)) return insn
