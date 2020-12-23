@@ -44,17 +44,3 @@ open class ClassTransformer : IClassTransformer {
         }
     }
 }
-
-class MyModTransformer : ClassTransformer() {
-    init {
-        transform("net.minecraft.client.Minecraft") {
-            val startGame = method("startGame") ?: return@transform
-
-            insert(startGame) {
-                getstatic(System::class, "out", PrintStream::class)
-                ldc("Hello, World!")
-                invokevirtual(PrintStream::class, "println", void, String::class)
-            }
-        }
-    }
-}
