@@ -1,11 +1,9 @@
 package club.chachy.transformers.dsl
 
 import codes.som.anthony.koffee.BlockAssembly
-import codes.som.anthony.koffee.insns.jvm.invokestatic
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.*
-import java.lang.reflect.Method
 
 class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     fun method(name: String) = method(classNode, name)

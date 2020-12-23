@@ -1,16 +1,11 @@
 package club.chachy.transformers
 
 import club.chachy.transformers.dsl.TransformerBuilder
-import codes.som.anthony.koffee.insns.jvm.getstatic
-import codes.som.anthony.koffee.insns.jvm.invokevirtual
-import codes.som.anthony.koffee.insns.jvm.ldc
 import com.google.common.collect.ArrayListMultimap
 import net.minecraft.launchwrapper.IClassTransformer
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
-import java.io.File
-import java.io.PrintStream
 
 
 open class ClassTransformer : IClassTransformer {
