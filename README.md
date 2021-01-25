@@ -2,7 +2,7 @@
 
 Kransformer is a simple project that allows for an easy start to using transformers with Forge with instruction building powered by Koffee.
 
-### Example Transformer:
+### Example Kransformer :):
 
 ```kotlin
 class MyModTransformer : ClassTransformer() {
