@@ -1,6 +1,6 @@
-package club.chachy.transformers
+package club.chachy.kransformer
 
-import club.chachy.transformers.dsl.TransformerBuilder
+import club.chachy.kransformer.dsl.TransformerBuilder
 import com.google.common.collect.ArrayListMultimap
 import net.minecraft.launchwrapper.IClassTransformer
 import org.objectweb.asm.ClassReader
@@ -10,6 +10,8 @@ import org.objectweb.asm.tree.ClassNode
 open class ClassTransformer : IClassTransformer {
     // ArrayListMultiMap to hold transformer data
     private val transformers: ArrayListMultimap<String, TransformerBuilder.() -> Unit> = ArrayListMultimap.create()
+
+    private val writerHandlers = mutableListOf<(ClassWriter) -> Unit>()
 
     /**
      * Transform a given class.
@@ -36,9 +38,17 @@ open class ClassTransformer : IClassTransformer {
             it(TransformerBuilder(node, transformedName))
         }
 
-        return ClassWriter(ClassWriter.COMPUTE_FRAMES).also {
+        val writer = ClassWriter(ClassWriter.COMPUTE_FRAMES).also {
             node.accept(it)
-        }.toByteArray()
+        }
+
+        writerHandlers.forEach { it.invoke(writer) }
+
+        return writer.toByteArray()
+    }
+
+    fun writerHandler(block: (ClassWriter) -> Unit) {
+
     }
 
     /**

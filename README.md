@@ -1,6 +1,6 @@
-# Transformers-DSL
+# Kransformer
 
-Transformers DSL is a simple project that allows for an easy start to using transformers with Forge with instruction building powered by Koffee.
+Kransformer is a simple project that allows for an easy start to using transformers with Forge with instruction building powered by Koffee.
 
 ### Example Transformer:
 

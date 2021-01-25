@@ -1,4 +1,4 @@
-package club.chachy.transformers.dsl
+package club.chachy.kransformer.dsl
 
 import codes.som.anthony.koffee.BlockAssembly
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper

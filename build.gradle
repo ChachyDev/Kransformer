@@ -16,8 +16,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'kotlin'
 
 version = "1.0"
-group = "club.chachy.transformers"
-archivesBaseName = "Transformer-DSL"
+group = "club.chachy.kransformer"
+archivesBaseName = "Kransformer"
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
@@ -27,12 +27,12 @@ minecraft {
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io/' }
+    maven { url "https://maven.hackery.site/" }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation('com.github.videogame-hacker:Koffee:1869e1ecdd') {
+    implementation("codes.som.anthony:koffee:8.0.2") {
         exclude module: 'asm-commons'
         exclude module: 'asm-tree'
         exclude module: 'asm'
