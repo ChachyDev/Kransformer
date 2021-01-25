@@ -48,7 +48,7 @@ open class ClassTransformer : IClassTransformer {
     }
 
     fun writerHandler(block: (ClassWriter) -> Unit) {
-
+        writerHandlers.add(block)
     }
 
     /**
