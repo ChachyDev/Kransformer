@@ -65,15 +65,8 @@ open class ClassTransformer : IClassTransformer {
     init {
         writerHandler {
             val shouldOutputBytecode = System.getProperty("debugBytecode", "false")?.toBoolean() ?: false
-            if (shouldOutputBytecode) {
-                val node = ClassNode()
-                try {
-                    node.accept(it.writer)
-                } catch (t: Throwable) {
-                    System.err.println("Exception when transforming " + node.name + " : " + t.javaClass.simpleName)
-                    t.printStackTrace()
-                }
 
+            if (shouldOutputBytecode) {
                 val bytecodeDirectory = File("bytecode")
                 bytecodeDirectory.mkdirs()
 
@@ -82,8 +75,7 @@ open class ClassTransformer : IClassTransformer {
 
                 try {
                     bytecodeOutput.writeBytes(it.writer.toByteArray())
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } catch (ignored: Exception) {
                 }
             }
         }
