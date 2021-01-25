@@ -18,10 +18,10 @@ import org.objectweb.asm.tree.*
 
 class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     // Get a method from the transforming class' ClassNode
-    fun method(name: String) = method(classNode, name)
+    fun method(deobfName: String, seargeName: String) = method(classNode, deobfName, seargeName)
 
     // Get a method from a specified class node with its name
-    fun method(classNode: ClassNode, name: String) = classNode.methods.firstOrNull { it.name == name }
+    fun method(classNode: ClassNode, deobfName: String, seargeName: String) = classNode.methods.firstOrNull { mapMethodName(classNode, it).run { this == deobfName || this == seargeName } }
 
     // Get a method from a boolean check from the transforming class' ClassNode
     fun method(node: (MethodNode) -> Boolean) = method(classNode, node)
@@ -30,10 +30,10 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     fun method(classNode: ClassNode, node: (MethodNode) -> Boolean) = classNode.methods.firstOrNull(node)
 
     // Get field from a the transforming class' ClassNode
-    fun field(name: String) = field(classNode, name)
+    fun field(deobfName: String, seargeName: String) = field(classNode, deobfName, seargeName)
 
     // Get a field from a specified ClassNode with a name.
-    fun field(classNode: ClassNode, name: String) = classNode.fields.firstOrNull { it.name == name }
+    fun field(classNode: ClassNode, deobfName: String, seargeName: String) = classNode.fields.firstOrNull { mapFieldName(classNode, it).run { this == deobfName || this == seargeName } }
 
     // Create a ClassNode instance from a class name.
     fun clazz(name: String): ClassNode {
@@ -61,8 +61,8 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     fun insert(methodNode: MethodNode, block: BlockAssembly.() -> Unit) =
         methodNode.instructions.insert(BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
 
-    fun insert(name: String, block: BlockAssembly.() -> Unit) =
-        method(name)?.instructions?.insert(BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
+    fun insert(deobfName: String, seargeName: String, block: BlockAssembly.() -> Unit) =
+        method(deobfName, seargeName)?.instructions?.insert(BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
 
     fun insert(methodNode: MethodNode, insnNode: AbstractInsnNode, block: BlockAssembly.() -> Unit) =
         methodNode.instructions.insert(insnNode, BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
@@ -90,7 +90,7 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
 
     fun clearInstructions(methodNode: MethodNode) {
         methodNode.instructions.clear()
-        methodNode.localVariables.clear()
-        methodNode.tryCatchBlocks.clear()
+        methodNode.localVariables?.clear()
+        methodNode.tryCatchBlocks?.clear()
     }
 }
