@@ -2,7 +2,7 @@
 
 Kransformer is a simple project that allows for an easy start to using transformers with Forge with instruction building powered by Koffee.
 
-### Example Kransformer :):
+### Example usage of Kransformer:
 
 ```kotlin
 class MyModTransformer : ClassTransformer() {
@@ -19,3 +19,8 @@ class MyModTransformer : ClassTransformer() {
     }
 }
 ```
+
+### Debugging
+If you want to have Kransformer output the .class files with the bytecode modifications applied:
+- Add "-DdebugBytecode=true" to your JVM Arguments
+- The modified .class files should be outputted to a folder called "bytecode" in your run directory
