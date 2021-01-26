@@ -68,14 +68,14 @@ open class ClassTransformer : IClassTransformer {
 
             if (shouldOutputBytecode) {
                 val bytecodeDirectory = File("bytecode")
-                bytecodeDirectory.mkdirs()
-
                 val transformedClassName = "${it.transformedName.replace('.', '/')}.class"
                 val bytecodeOutput = File(bytecodeDirectory, transformedClassName)
 
                 try {
+                    bytecodeOutput.parentFile.mkdirs()
                     bytecodeOutput.writeBytes(it.writer.toByteArray())
-                } catch (ignored: Exception) {
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
