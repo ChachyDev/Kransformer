@@ -18,10 +18,10 @@ import org.objectweb.asm.tree.*
 
 class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     // Get a method from the transforming class' ClassNode
-    fun method(deobfName: String, seargeName: String) = method(classNode, deobfName, seargeName)
+    fun method(deobfName: String, seargeName: String, descriptor: String? = null) = method(classNode, deobfName, seargeName, descriptor)
 
     // Get a method from a specified class node with its name
-    fun method(classNode: ClassNode, deobfName: String, seargeName: String) = classNode.methods.firstOrNull { mapMethodName(classNode, it).run { this == deobfName || this == seargeName } }
+    fun method(classNode: ClassNode, deobfName: String, seargeName: String, descriptor: String? = null) = classNode.methods.firstOrNull { mapMethodDesc(it).run { this == descriptor || descriptor == null } && mapMethodName(classNode, it).run { this == deobfName || this == seargeName } }
 
     // Get a method from a boolean check from the transforming class' ClassNode
     fun method(node: (MethodNode) -> Boolean) = method(classNode, node)
