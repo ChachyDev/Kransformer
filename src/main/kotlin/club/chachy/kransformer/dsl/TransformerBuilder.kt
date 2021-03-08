@@ -9,19 +9,24 @@ import org.objectweb.asm.tree.*
  * Builder which contains utilities.
  *
  * @param classNode ClassNode instance of the class being transformed.
- *
  * @param name Transformed name of the class being currently transformed.
  *
  * @author ChachyDev
  * @since 1.0
  */
-
 class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     // Get a method from the transforming class' ClassNode
-    fun method(deobfName: String, seargeName: String, descriptor: String? = null) = method(classNode, deobfName, seargeName, descriptor)
+    fun method(deobfName: String, seargeName: String, descriptor: String? = null) =
+        method(classNode, deobfName, seargeName, descriptor)
 
     // Get a method from a specified class node with its name
-    fun method(classNode: ClassNode, deobfName: String, seargeName: String, descriptor: String? = null) = classNode.methods.firstOrNull { mapMethodDesc(it).run { this == descriptor || descriptor == null } && mapMethodName(classNode, it).run { this == deobfName || this == seargeName } }
+    fun method(classNode: ClassNode, deobfName: String, seargeName: String, descriptor: String? = null) =
+        classNode.methods.firstOrNull {
+            mapMethodDesc(it).run { this == descriptor || descriptor == null } && mapMethodName(
+                classNode,
+                it
+            ).run { this == deobfName || this == seargeName }
+        }
 
     // Get a method from a boolean check from the transforming class' ClassNode
     fun method(node: (MethodNode) -> Boolean) = method(classNode, node)
@@ -33,7 +38,8 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     fun field(deobfName: String, seargeName: String) = field(classNode, deobfName, seargeName)
 
     // Get a field from a specified ClassNode with a name.
-    fun field(classNode: ClassNode, deobfName: String, seargeName: String) = classNode.fields.firstOrNull { mapFieldName(classNode, it).run { this == deobfName || this == seargeName } }
+    fun field(classNode: ClassNode, deobfName: String, seargeName: String) =
+        classNode.fields.firstOrNull { mapFieldName(classNode, it).run { this == deobfName || this == seargeName } }
 
     // Create a ClassNode instance from a class name.
     fun clazz(name: String): ClassNode {
@@ -62,7 +68,12 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
         methodNode.instructions.insert(BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
 
     fun insert(deobfName: String, seargeName: String, block: BlockAssembly.() -> Unit) =
-        method(deobfName, seargeName)?.instructions?.insert(BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
+        method(deobfName, seargeName)?.instructions?.insert(
+            BlockAssembly(
+                InsnList(),
+                ArrayList()
+            ).apply(block).instructions
+        )
 
     fun insert(methodNode: MethodNode, insnNode: AbstractInsnNode, block: BlockAssembly.() -> Unit) =
         methodNode.instructions.insert(insnNode, BlockAssembly(InsnList(), ArrayList()).apply(block).instructions)
@@ -73,6 +84,25 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
             BlockAssembly(InsnList(), ArrayList())
                 .apply(block)
                 .instructions
+        )
+    }
+
+    fun insertBefore(methodNode: MethodNode, insnNode: AbstractInsnNode, insnList: InsnList) =
+        methodNode.instructions.insertBefore(insnNode, insnList)
+
+    fun insert(methodNode: MethodNode, insnList: InsnList) =
+        methodNode.instructions.insert(insnList)
+
+    fun insert(deobfName: String, seargeName: String, insnList: InsnList) =
+        method(deobfName, seargeName)?.instructions?.insert(insnList)
+
+    fun insert(methodNode: MethodNode, insnNode: AbstractInsnNode, insnList: InsnList) =
+        methodNode.instructions.insert(insnNode, insnList)
+
+    fun insertReturn(methodNode: MethodNode, insnList: InsnList) {
+        methodNode.instructions.insertBefore(
+            methodNode.instructions.last.previous,
+            insnList
         )
     }
 
