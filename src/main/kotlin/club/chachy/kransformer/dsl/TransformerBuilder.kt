@@ -19,6 +19,9 @@ class TransformerBuilder(val classNode: ClassNode, val name: String?) {
     fun method(deobfName: String, seargeName: String, descriptor: String? = null) =
         method(classNode, deobfName, seargeName, descriptor)
 
+    fun method(name: String, descriptor: String? = null) =
+        method(classNode, name, name, descriptor)
+
     // Get a method from a specified class node with its name
     fun method(classNode: ClassNode, deobfName: String, seargeName: String, descriptor: String? = null) =
         classNode.methods.firstOrNull {

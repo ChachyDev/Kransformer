@@ -9,7 +9,8 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
 import java.io.File
 
-open class ClassTransformer : IClassTransformer {
+
+open class ForgeClassTransformer : IClassTransformer {
     // ArrayListMultiMap to hold transformer data
     private val transformers: ArrayListMultimap<String, TransformerBuilder.() -> Unit> = ArrayListMultimap.create()
     private val writerHandlers = mutableListOf<(WriterHandler) -> Unit>()
@@ -53,7 +54,7 @@ open class ClassTransformer : IClassTransformer {
      */
     fun transform(vararg name: String, transformer: TransformerBuilder.() -> Unit) {
         name.forEach {
-            transformers.put(it, transformer)
+            transformers.put(it.replace(".", "/"), transformer)
         }
     }
 
